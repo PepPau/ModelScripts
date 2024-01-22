@@ -1,0 +1,55 @@
+function.density.fitted.probability.model.ln2 <- function( aux.glm.function, aux.data.function, aux.title, aux.limits=c(0.5)) {
+#aux.color <- c(1)
+#aux.color <- c(6,"#7C4D79") #Neurons
+aux.color <- c(4,2) #Control Ln2PMMA
+
+#se reserva el valor inicial de substrate
+aux.data.function$Physical_Substrate_initial <- aux.data.function$Physical_Substrate
+
+#se usa la ecuacion de regresion con el substrato LN2
+aux.data.function$Physical_Substrate <- 4
+
+# HE cambiado el aux.glm.function por el aux.reg.log.selected que es el que usamos 
+aux.predicted.PSP <- predict(aux.reg.log.selected, type='response' , newdata= aux.data.function)
+aux.predicted.SNP <-  1- aux.predicted.PSP
+
+#se repone el valor inicial de substrate
+aux.data.function$Physical_Substrate <- aux.data.function$Physical_Substrate_initial
+
+aux.density <- tapply(aux.predicted.PSP , aux.data.function$Physical_Substrate, density)
+aux.ylim <- c(min(aux.density[[1]]$y, aux.density[[2]]$y), max(aux.density[[1]]$y, aux.density[[2]]$y))
+par(mfrow = c(1,1))
+plot(aux.density[[1]], xlim=c(0,1), ylim=aux.ylim, xlab='Fitted probability', main= aux.name.dataframe) #'Prob. promising',
+
+lines(aux.density[[1]], col= aux.color[1])
+lines(aux.density[[2]], col= aux.color[2])
+#abline(v=c(0.5, 2/3), lty=3)
+#abline(v=c(1/3, 0.5, 2/3), lty=3)
+abline(v=aux.limits, lty=3)
+#legend("topleft", inset=0.01, legend=c('Control', 'Ln2PMMA'), col=c(1, 2),lty=1)
+#to calculate the probability under density curve 
+for(i.material in 1:2) {
+aux.d <- aux.density[[i.material]]
+xx <- aux.d$x  ; dx <- xx[2L] - xx[1L]  ## spacing / bin size
+yy <- aux.d$y  ; aux.c <- sum(yy) * dx  ## sum(yy * dx)
+p.unscaled <- sum(yy[xx > 0.5]) * dx ; p.scaled <- p.unscaled / aux.c
+if(is.element(0.5, aux.limits)) text(0.6 , aux.ylim[2]/(2+i.material),  round(p.scaled, digits=2)  ,  col= aux.color[i.material])
+p.unscaled <- sum(yy[xx > 2/3]) * dx ; p.scaled <- p.unscaled / aux.c
+#text(0.8 , aux.ylim[2]/(2+i.material),  round(p.scaled, digits=2)  ,  col=aux.color[i.material] )
+for(i.limit in 1:length(aux.limits)) {
+p.unscaled <- sum(yy[xx > aux.limits[i.limit]]) * dx ; p.scaled <- p.unscaled / aux.c
+text(aux.limits[i.limit]+0.1  , aux.ylim[2]/(2+i.material),  round(p.scaled, digits=2)  ,  col= aux.color[i.material])
+} #end for i.limit
+} #end for i.material
+#return(aux.ylim)
+return(list(aux.predicted.PSP = aux.predicted.PSP, aux.predicted.SNP = aux.predicted.SNP, aux.ylim = aux.ylim))
+} #end funtion
+
+#### Calculate PSP and SNP by APPLYING ln2PMMA equation #####
+result <- function.density.fitted.probability.model.ln2(aux.reg.log.selected, aux.data.function, "Title", c(0.5))
+aux.predicted.PSP <- result$aux.predicted.PSP
+aux.predicted.SNP <- result$aux.predicted.SNP
+aux.ylim <- result$aux.ylim
+
+function.density.fitted.probability.model.ln2( aux.glm.function, aux.data.function, aux.title, aux.limits=c(1/3, 0.5))
+
