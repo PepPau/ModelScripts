@@ -1,0 +1,71 @@
+
+#####SOLO CARGAR LIBERIRAS######
+
+################################
+#to installl                libraries 
+
+
+install.packages('car' )
+install.packages('devtools')
+install.packages(  'ggplot2' )
+install.packages(  'caret' )
+install.packages(c( 'sjmisc','sjPlot')  )
+install.packages(c( 'rlist','rmatio', 'rgl', 'tab', 'dplyr', 'ks')  )
+install.packages(c( 'effects','gam', 'corrplot', 'pROC', 'InformationValue', 'varImp')  )
+#devtools::install_github("InformationValue")  # For latest dev version.
+install.packages(  'gridExtra' )
+install.packages(  'informationValue' )
+install.packages("writexl")
+install.packages('pROC')
+install.packages ('gam')
+install.packages ('effects')
+install.packages ('carData')
+install.packages('viridis')
+install.packages('viridisLite')
+
+#to libraries
+
+library(gridExtra)
+library(MASS)
+library(car)
+library(rmatio)
+library("gridExtra")
+library(ggplot2)
+library(rlist)
+library(corrplot)
+library(effects)
+library(gam)
+library(pROC)
+library(rgl)
+library(tab)
+library(varImp)
+library(dplyr)
+library(caret)
+library(ks)
+library(sjPlot)
+library(sjmisc)
+#fail on the following library
+#library(informationValue)
+library(writexl)
+library(pROC)
+library(gam)
+library('effects')
+library('carData')
+library('viridis')
+library('viridisLite')
+
+#####LECTURA DATOS ORIGINALES CARGAR MODELO######
+#setwd("C:\\Users\\peppa\\OneDrive - Universitat de Barcelona\\PhD_EXPERIMENTAL\\PRIORITARY\\RModel\\Projects\\ONE SINGLE EQUATION")
+aux.data <- read.table(file="Data_Nuclei_Clean.csv" , header = TRUE, sep=';', dec=',')
+
+aux.data$ratio.Area.BoundingBox <-     aux.data$Area/ aux.data$BoundingBoxArea
+aux.data$ratio.CitoInt.Area <-     aux.data$CytoIntensity/ aux.data$Area
+aux.data$ratio.Nucleo.Cito <-   aux.data$NucIntensity   /   aux.data$CytoIntensity  
+
+#defining the variable  cell_density=total_nuc/(0.21255^2), 27-july-2023, expressed in number of cells/squared milimiter
+aux.data$cell_density <-  aux.data$total_nuc/(0.21255^2)
+
+AllMatDataFiles.17.11.2021 <- aux.data
+
+
+
