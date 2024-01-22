@@ -1,0 +1,69 @@
+
+
+### FUNCTION Log-ODDS RATIO from Control and Ln2PMMA GLM equations
+aux.data.1 <- aux.data.fitting
+
+#to plot effects 
+#functions with Effects require that declaration of factors are not in the formula 
+#aux.model <- aux.reg.log.step.disruptive.cell.density
+aux.data.1$Physical_Substrate.factor <- as.factor(aux.data.1$Physical_Substrate)
+
+aux.model <-    glm(formula = y ~ Physical_Substrate.factor + Area + I(Area^2) +    I(Area^3) +  Physical_Substrate.factor:I(Eccentricity^3) +    Physical_Substrate.factor :Area + I(Eccentricity^2):cell_density +     I(Eccentricity^3):I(cell_density^2) + Area:cell_density +     Area:I(cell_density^2) + I(Area^2):cell_density + I(Area^2):I(cell_density^2),     family = "binomial", data = aux.data.1)
+
+#funcion auxiliar
+aux.fun.logodds.substrate <- function(x,y) {  
+  newdat <- data.frame(Area = x, Eccentricity =y  , Physical_Substrate.factor="1" , cell_density= 600)
+  aux.control <-  predict(aux.model  , newdata=newdat) 
+  newdat <- data.frame(Area = x, Eccentricity =y  , Physical_Substrate.factor= "4" , cell_density= 600)
+  aux.ln2 <-  predict(aux.model  , newdata=newdat) 
+  return(aux.ln2 -aux.control)
+}
+
+#to represent distinguishing the Physical Substrate
+par(mfrow=c(1,1))
+aux.name.marker <- "Physical_Substrate"
+aux.variable.marker <- aux.data.1[[aux.name.marker ]]
+aux.marcador <- !is.na(aux.variable.marker) 
+aux.marcador.1 <- aux.marcador  
+
+#to include only region where there is data
+x.seq <- seq(min(aux.data.1$Area[aux.marcador.1], na.rm=TRUE), max(aux.data.1$Area[aux.marcador.1],  na.rm=TRUE), length=50)
+y.seq <- seq(min(aux.data.1$Eccentricity[aux.marcador.1],  na.rm=TRUE), max(aux.data.1$Eccentricity[aux.marcador.1],  na.rm=TRUE), length=50)
+
+#to evaluate in all the region
+x.seq <- seq(min(aux.data.1$Area, na.rm=TRUE), max(aux.data.1$Area, na.rm=TRUE), length=50)
+y.seq <- seq(min(aux.data.1$Eccentricity, na.rm=TRUE), max(aux.data.1$Eccentricity, na.rm=TRUE), length=50)
+
+aux.fit <- outer(x.seq, y.seq, Vectorize(aux.fun.logodds.substrate))
+aux.breaks <- c(-40:40)*0.2
+image( x.seq, y.seq, aux.fit, xlab='Area', ylab='Eccentricity', col = hcl.colors(length(aux.breaks)-1, "Cyan-Magenta", rev = TRUE) )
+title('Log-Odds Ratio Function')
+contour( x.seq, y.seq, aux.fit, add=T, col=1, labcex=1.2)
+
+#### To obtain SELECTED CONTOURS AT DESIRED LEVEL
+image( x.seq, y.seq, aux.fit, xlab='Area', ylab='Eccentricity', col = hcl.colors(length(aux.breaks)-1, "Cyan-Magenta", rev = TRUE) )
+title('Log-Odds Ratio Function')
+contour(x.seq, y.seq, aux.fit, add=T, col = 1, lwd = 2, cex=2)
+
+### to create dataframe from contour line
+
+contour.lines <- contourLines(x.seq, y.seq, aux.fit, levels = 0)
+contour.lines2 <- contourLines(x.seq, y.seq, aux.fit, levels = -0.1)
+contour.lines3 <- contourLines(x.seq, y.seq, aux.fit, levels = -0.25)
+
+# Extract x and y coordinates for levels = 0
+xcontour <- contour.lines[[1]]$x
+ycontour <- contour.lines[[1]]$y
+
+xcontour2 <- contour.lines2[[1]]$x
+ycontour2 <- contour.lines2[[1]]$y
+
+xcontour3 <- contour.lines3[[1]]$x
+ycontour3 <- contour.lines3[[1]]$y
+
+# Create a data frame with x and y coordinates
+contour.data <- data.frame(x = xcontour, y = ycontour)
+contour.data2 <- data.frame(x = xcontour2, y = ycontour2)
+contour.data3 <- data.frame(x = xcontour3, y = ycontour3)
+
+
