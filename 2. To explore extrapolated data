@@ -1,0 +1,56 @@
+
+#OBTENER PREDICCION ASOCIADA A LA APL DEL GLM A LOS DATOS DEL NUEVO DATASET
+aux.reg.log.selected <- aux.reg.log.step.disruptive.cell.density      
+#to obtain the predicted values in logistic models
+aux.predicted.PSP <- predict(aux.reg.log.selected, type='response' , newdata=aux.data.1)
+#aux.predicted.SNP <- predict( aux.reg.log.selected.superNOpromising  , type='response' , newdata=aux.data.1)
+aux.predicted.SNP <-  1- aux.predicted.PSP
+
+#################### EXTRAPOLACION #####################
+
+aux.name.shape <- c("Area","Eccentricity","cell_density")
+aux.name.shape.title <- c("Area","Eccentricity","Cell density")
+aux.xlim.covariates <- rbind(c( 0,300) , c(0.2, 1) , c(0, 4000)) #to put the same scale in the X-axis for every days
+
+#general script
+par(mfrow=c(1,3))
+for(i.shape in 1:3) {
+aux.selected.name <- aux.name.shape[i.shape]
+aux.selected.title <- aux.name.shape.title[i.shape]
+aux.density.1 <- density( aux.data.1[[as.name(aux.selected.name)]] )
+aux.density <- density( aux.data.fitting[[as.name(aux.selected.name)]])
+
+aux.ylim <- c(min(aux.density$y, aux.density.1$y), max(aux.density$y, aux.density.1$y))
+aux.xlim <- aux.xlim.covariates[i.shape , ]
+
+plot(aux.density, main= aux.selected.title, ylim=aux.ylim, xlim=aux.xlim, xlab=aux.selected.title )
+lines(aux.density.1,   col=2)
+}  #end for i.shape
+legend( 'topright', legend=c('Fitting data', 'New data'), col=c(1,2), lty=1 , cex=1)
+
+
+
+#################### PARA EVITAR USAR EL MODELO EN EXTRAPOLACION #####################
+###se requiere disponer del data.frame con el que se ha ajustado el modelo
+# aux.data.fitting
+      
+# data only in NOT extrapolation
+aux.data.function <-   aux.data.1 
+#na.rm=T si te encuentras algun NA, remuevelo
+aux.marcador <-  (aux.data.function$cell_density <=max(aux.data.fitting$cell_density, na.rm=T)  ) & (aux.data.function$Area <=max(aux.data.fitting$Area, na.rm=T)  ) & (aux.data.function$Eccentricity <=max(aux.data.fitting$Eccentricity, na.rm=T)  )
+aux.data.function <-   aux.data.function[ aux.marcador , ]
+dim(aux.data.function)
+
+aux.predicted.PSP <- predict(aux.reg.log.selected, type='response' , newdata=aux.data.function)
+aux.predicted.SNP <-  1- aux.predicted.PSP
+aux.data.1 <- aux.data.function
+
+
+
+##################EXTRAPOLATION
+
+# data only without extrapolation
+#na.rm=T si te encuentras algun NA, remuevelo
+aux.marcador <-  (aux.data.function$cell_density <=max(aux.data.fitting$cell_density, na.rm=T)  ) & (aux.data.function$Area <=max(aux.data.fitting$Area, na.rm=T)  ) & (aux.data.function$Eccentricity <=max(aux.data.fitting$Eccentricity, na.rm=T)  )
+aux.data.function <-   aux.data.function[ aux.marcador , ]
+dim(aux.data.function)
