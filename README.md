@@ -32,8 +32,8 @@ This script serves to apply the logOdds ratio function to different datasets.
 Provide a graphical outcome with individual points associated to different colors depending on their location, above F(0) or above F(-0.1). Also provides the percentage associated to colored points within  the area range established by Pax6 maximum-minimum areas.
 
 # Contact
-Jose Pablo Soriano Esqué 
-psoriano@ub.edu
-Neural Development Lab
+Jose Pablo Soriano Esqué, 
+psoriano@ub.edu,
+Neural Development Lab,
 Department of Pathology and Experimental Therapeutics, University of Barcelona. 
 
