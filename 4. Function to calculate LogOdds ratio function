@@ -1,0 +1,21 @@
+RegionfunctionMinMax <- function(aux.marker, contour.data) {
+  RG.function.line <- lm(contour.data$y ~ contour.data$x)
+  RG.function.coeff <- coef(RG.function.line)
+  RG.intercept <- RG.function.coeff[1]
+  RG.slope <- RG.function.coeff[2]
+  # Initialize empty data frame
+  above.line.points <- data.frame(x = numeric(0), y = numeric(0))
+  above.line.points.minmax <- data.frame(x = numeric(0), y = numeric(0)) 
+  for (i in 1:nrow(aux.marker)) {
+    predicted.ecc <- RG.intercept + RG.slope * aux.marker$Area[i]
+    Physical_substrate = aux.marker$Physical_Substrate [i]
+    
+    if (aux.marker$Eccentricity[i] > predicted.ecc & aux.marker$Area[i] > 34.74 & aux.marker$Area[i] < 139.1) {
+      above.line.points.minmax <- rbind(above.line.points.minmax, 
+                                 data.frame(x = aux.marker$Area[i], y = aux.marker$Eccentricity[i], Physical_substrate))
+    }
+    
+  }
+  return(above.line.points.minmax)
+}
+
