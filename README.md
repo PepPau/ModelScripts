@@ -2,7 +2,7 @@
 This repository contains scripts with the R code used to build, check, and apply new data to the RGM model that makes part of my PhD thesis entilted "The RG niche: deciphering key mechanotransduction components". 
 We have developed the radial glia mimetic (RGM) model to characterize RG cells based on nuclear parameters and cell density. 
 Cell nuclei were obtained from primary enriched astrocyte cultures that were seeded onto ln2PMMA, a biomaterial that mimics the neurogenic niche 
-(see Mattotti, M., Alvarez, Z., Ortega, J.A., Planell, J.A., Engel, E., and Alcántara, S. (2012). Inducing functional radial glia-like progenitors from cortical astrocyte cultures using micropatterned PMMA. Biomaterials 33, 1759–1770. https://doi.org/10.1016/j.biomaterials.2011.10.086.)
+(see Mattotti, M., Álvarez, Z., Ortega, J.A., Planell, J.A., Engel, E., and Alcántara, S. (2012). Inducing functional radial glia-like progenitors from cortical astrocyte cultures using micropatterned PMMA. Biomaterials 33, 1759–1770. https://doi.org/10.1016/j.biomaterials.2011.10.086.)
 
 To further apply this codes to new data the user should take into account of variables name used for each script. 
 If required, you can email me and I can provide the data used for fitting and extra scripts to easily adapt your new data to the provided code. 
