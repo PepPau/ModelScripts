@@ -1,0 +1,49 @@
+###################################
+####### EXECUTE TO PLOT ###########
+contour(x.seq, y.seq, aux.fit, levels = c(0, -0.1), col = 1, lwd = 2, lty = c(1, 2, 3), cex = 2, add = FALSE)
+title (marker.dataset)
+aux.marker.xy <- data.frame(x = aux.marker.1$Area, y = aux.marker.1$Eccentricity)
+points(aux.marker.xy$x, aux.marker.xy$y, col = 1, pch = 16)
+
+
+# point.above.RG.fun3 <- RegionfunctionMinMax(aux.marker.1, contour.data3)
+# prop.markers3 <- nrow(point.above.RG.fun3)/nrow(aux.marker.1)*100
+# # prop.markers.control2 <- (nrow(point.above.RG.fun2[point.above.RG.fun2$Physical_substrate == 1,])/nrow(aux.marker.1)) * 100
+# # prop.markers.ln22 <- (nrow(point.above.RG.fun2[point.above.RG.fun2$Physical_substrate == 4,])/nrow(aux.marker.1)) * 100
+# points(point.above.RG.fun3$x, point.above.RG.fun3$y, col = 7, pch = 16)
+
+point.above.RG.fun2 <- RegionfunctionMinMax(aux.marker.1, contour.data2)
+prop.markers2 <- nrow(point.above.RG.fun2)/nrow(aux.marker.1)*100
+# prop.markers.control2 <- (nrow(point.above.RG.fun2[point.above.RG.fun2$Physical_substrate == 1,])/nrow(aux.marker.1)) * 100
+# prop.markers.ln22 <- (nrow(point.above.RG.fun2[point.above.RG.fun2$Physical_substrate == 4,])/nrow(aux.marker.1)) * 100
+points(point.above.RG.fun2$x, point.above.RG.fun2$y, col = 6, pch = 16)
+
+point.above.RG.fun <- RegionfunctionMinMax(aux.marker.1, contour.data)
+prop.markers <- nrow(point.above.RG.fun)/nrow(aux.marker.1)*100
+# prop.markers.control <- (nrow(point.above.RG.fun[point.above.RG.fun$Physical_substrate == 1,])/nrow(aux.marker.1)) * 100
+#prop.markers.ln2 <- (nrow(point.above.RG.fun[point.above.RG.fun$Physical_substrate == 4,])/nrow(aux.marker.1)) * 100
+points(point.above.RG.fun$x, point.above.RG.fun$y, col = 7, pch = 16)
+
+text( 240, 0.5, label= paste(round(prop.markers, digits=1),"%") , cex=2, col= 7)
+text( 240, 0.4, label= paste(round(prop.markers2, digits=1),"%") , cex=2, col= 6)
+# text( 240, 0.3, label= paste(round(prop.markers3, digits=1),"%") , cex=2, col= 7)
+
+
+# #ONLY FOR PAX6
+# if (marker.dataset == 'Pax6') {
+#   minArea <- min(point.above.RG.fun$x)
+#   maxArea <- max(point.above.RG.fun$x)
+#   
+#   # Add vertical dashed lines
+#   abline(v = minArea, col = 1, lty = 2, lwd = 2)
+#   abline(v = maxArea, col = 1, lty = 2, lwd = 2)
+# }
+
+### Limits corresponding to Pax6 Nuclei used for model construction
+minArea <- 34.75294
+maxArea <- 139.0117
+abline(v = minArea, col = 1, lty = 2, lwd = 2)
+abline(v = maxArea, col = 1, lty = 2, lwd = 2)
+
+
+
