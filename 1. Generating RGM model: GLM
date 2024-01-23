@@ -1,0 +1,69 @@
+
+####### GENERAR MODELO GLM DISRUPTIVO Y SELECCION DE RESPUESTA BINARIA #######
+
+#Binary response data selection DISRUPTIVE MODEL
+
+#PROMETEDORAS
+aux.data$superprometedora <-  is.element(aux.data$Pax6, c(+1))&is.element( aux.data$Nestin, c(+1))   |  
+is.element(aux.data$Pax6, c(1)) & is.element( aux.data$Nestin, c(-1)) |
+is.element(aux.data$Pax6, c(+1)) & is.element( aux.data$Sox2, c(+1))  | 
+is.element(aux.data$Pax6, c(1))&is.element( aux.data$Sox2, c(-1))  | 
+is.element(aux.data$Nestin, c(1))&is.element( aux.data$Sox2, c(1))  | 
+is.element(aux.data$Pax6, c(1))&is.element( aux.data$GFAP, c(1)) | 
+is.element(aux.data$Pax6, c(1))&is.element( aux.data$GFAP, c(-1)) | 
+is.element(aux.data$Pax6, c(1))& is.element( aux.data$A2B5, c(-1,+1) )  
+#NO PROMETEDORAS
+aux.data$superNOprometedora <- is.element( aux.data$Pax6, c(-1) ) & is.element( aux.data$Nestin, c(-1) )   |
+(is.element( aux.data$Pax6, c(-1) ) & is.element( aux.data$GFAP, c(+1) ) )   |
+(is.element( aux.data$Pax6, c(-1) ) & is.element( aux.data$Sox2, c(-1) ) )   |
+(is.element( aux.data$Sox2, c(-1) ) & is.element( aux.data$Nestin, c(-1) ) )    |  
+ (is.element( aux.data$NG2, c(+1) ) & is.element( aux.data$Nestin, c(-1) ) )   |
+(is.element( aux.data$NG2, c(+1) ) & is.element( aux.data$Nestin, c(+1) ) )   |
+is.element(aux.data$Nestin, c(-1))&is.element( aux.data$GFAP, c(-1))  | 
+is.element(aux.data$Nestin, c(-1))&is.element( aux.data$GFAP, c(+1))  |
+is.element(aux.data$Pax6, c(-1))&is.element( aux.data$GFAP, c(-1))  | 
+(is.element( aux.data$NG2, c(+1) ) & !is.element( aux.data$Nestin, c(-1,+1) ) & !is.element( aux.data$Sox2, c(-1,+1) ) & !is.element( aux.data$Pax6, c(-1,+1) ) & !is.element( aux.data$GFAP, c(-1,+1) ) & !is.element( aux.data$Gsx2, c(-1,+1) ) & !is.element( aux.data$A2B5, c(-1,+1) )  ) |
+(is.element( aux.data$Gsx2, c(+1) ) & !is.element( aux.data$Nestin, c(-1,+1) ) & !is.element( aux.data$Sox2, c(-1,+1) ) & !is.element( aux.data$Pax6, c(-1,+1) ) & !is.element( aux.data$GFAP, c(-1,+1) ) & !is.element( aux.data$NG2, c(-1,+1) ) & !is.element( aux.data$A2B5, c(-1,+1) )  ) 
+
+#CONFUSAS
+aux.data$confusa <- is.element( aux.data$Nestin, c(-1) ) & is.element( aux.data$Sox2, c(+1) )  | 
+is.element( aux.data$Pax6, c(-1) ) & is.element( aux.data$Sox2, c(+1) )  |
+(is.element( aux.data$Nestin, c(+1) ) & !is.element( aux.data$Gsx2, c(-1,+1) ) & !is.element( aux.data$Sox2, c(-1,+1) ) & !is.element( aux.data$Pax6, c(-1,+1) ) & !is.element( aux.data$GFAP, c(-1,+1) ) & !is.element( aux.data$NG2, c(-1,+1) ) & !is.element( aux.data$A2B5, c(-1,+1) )  )  |
+(is.element( aux.data$Sox2, c(+1) ) & !is.element( aux.data$Nestin, c(-1,+1) ) & !is.element( aux.data$Gsx2, c(-1,+1) ) & !is.element( aux.data$Pax6, c(-1,+1) ) & !is.element( aux.data$GFAP, c(-1,+1) ) & !is.element( aux.data$NG2, c(-1,+1) ) & !is.element( aux.data$A2B5, c(-1,+1) )  )  |
+(is.element( aux.data$GFAP, c(+1) ) & !is.element( aux.data$Nestin, c(-1,+1) ) & !is.element( aux.data$Sox2, c(-1,+1) ) & !is.element( aux.data$Pax6, c(-1,+1) ) & !is.element( aux.data$Gsx2, c(-1,+1) ) & !is.element( aux.data$NG2, c(-1,+1) ) & !is.element( aux.data$A2B5, c(-1,+1) )  )  |
+is.element( aux.data$Nestin, c(+1) ) & is.element( aux.data$NG2, c(-1) )  | 
+is.element( aux.data$Nestin, c(+1) ) & is.element( aux.data$GFAP, c(+1) ) |
+is.element( aux.data$Nestin, c(+1) ) & is.element( aux.data$GFAP, c(-1) ) |
+is.element( aux.data$Nestin, c(+1) ) & is.element( aux.data$Sox2, c(-1) )  |
+is.element( aux.data$Nestin, c(+1) ) & is.element( aux.data$ Pax6, c(-1) )  
+
+#to define a variable with the clasification
+#esto me perimite generar una columna con la unificación de las columnas independientes de Prometedor, no prometedor y confuso
+aux.data$promising_nonpromising <- NA
+aux.data$promising_nonpromising[aux.data$superprometedora] <- 'superprometedora'
+aux.data$promising_nonpromising[aux.data$superNOprometedora] <- 'superNOprometedora'
+aux.data$promising_nonpromising[aux.data$confusa] <- 'confusa'
+
+data.base.disruptive <- aux.data 
+
+#expression for disruptive option, without prometedora
+aux.data <- data.base.disruptive
+
+aux.df <- aux.data 
+aux.marcador <-   aux.df$superprometedora  |   aux.df$superNOprometedora 
+aux.data.1 <- aux.df[aux.marcador, ]
+
+#exito=superprometedoras
+aux.data.1$y <-  aux.data.1$superprometedora 
+aux.name.dataframe <- c('RG')
+#to avoid problems with poly, the model is expressed with power of covariates
+
+aux.model <- glm(formula = y ~ ...) ## Equation provided in the PhD Thesis. 
+
+#RESULTADOS QUE GENERO y VARIABLES QUE USARE RELATIVAS AL MODELO
+aux.reg.log.step.disruptive.cell.density <-  aux.model
+aux.data.fitting <- aux.data.1
+aux.reg.log.selected <- aux.reg.log.step.disruptive.cell.density
+
+#datos y descripción del modelo
+summary(aux.reg.log.step.disruptive.cell.density )
