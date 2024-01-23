@@ -58,12 +58,7 @@ aux.data.1$y <-  aux.data.1$superprometedora
 aux.name.dataframe <- c('RG')
 #to avoid problems with poly, the model is expressed with power of covariates
 
-aux.model <- glm(formula = y ~ as.factor(Physical_Substrate) + Area + I(Area^2) + 
-    I(Area^3) + as.factor(Physical_Substrate):I(Eccentricity^3) + 
-    as.factor(Physical_Substrate):Area + I(Eccentricity^2):cell_density + 
-    I(Eccentricity^3):I(cell_density ^2) + Area: cell_density + Area:I(cell_density ^2) + 
-    I(Area^2): cell_density + I(Area^2):I(cell_density ^2), family = "binomial", 
-    data = aux.data.1)
+aux.model <- glm(formula = y ~ ...) ## Equation provided in the PhD Thesis. 
 
 #RESULTADOS QUE GENERO y VARIABLES QUE USARE RELATIVAS AL MODELO
 aux.reg.log.step.disruptive.cell.density <-  aux.model
