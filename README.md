@@ -33,7 +33,7 @@ Provide a graphical outcome with individual points associated to different color
 
 # Contact
 Jose Pablo Soriano Esqué, 
-psoriano@ub.edu,
+pep.pau.soriano@gmail.com,
 Neural Development Lab,
 Department of Pathology and Experimental Therapeutics, University of Barcelona. 
 
